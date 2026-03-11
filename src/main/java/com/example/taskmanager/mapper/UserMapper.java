@@ -1,23 +1,25 @@
 package com.example.taskmanager.mapper;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.taskmanager.dto.UserRequestDto;
 import com.example.taskmanager.dto.UserResponseDto;
 import com.example.taskmanager.entity.Role;
 import com.example.taskmanager.entity.User;
+import com.example.taskmanager.security.PasswordEncoder;
 
 @Component
 public class UserMapper{
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User toEntity(UserRequestDto dto){
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(dto.getPassword()));
+        user.setPassword(passwordEncoder.passwordEncoder().encode(dto.getPassword())); // Verschlüsselt das Passwort mit BCrypt
         user.setRole(Role.USER);
 
         return user;

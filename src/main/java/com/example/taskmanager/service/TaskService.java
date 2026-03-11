@@ -12,7 +12,6 @@ import com.example.taskmanager.entity.Project;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.TaskStatus;
 import com.example.taskmanager.exception.TaskNotFound;
-import com.example.taskmanager.exception.UserNotFound;
 import com.example.taskmanager.mapper.TaskMapper;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.repository.ProjectRepository;
