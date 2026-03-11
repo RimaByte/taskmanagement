@@ -9,6 +9,7 @@ import com.example.taskmanager.dto.ProjectRequestDto;
 import com.example.taskmanager.dto.ProjectResponseDto;
 import com.example.taskmanager.entity.Project;
 import com.example.taskmanager.entity.User;
+import com.example.taskmanager.exception.UserNotFound;
 import com.example.taskmanager.mapper.ProjectMapper;
 import com.example.taskmanager.repository.ProjectRepository;
 import com.example.taskmanager.repository.UserRepository;
@@ -28,7 +29,7 @@ public class ProjectService {
     
     public ProjectResponseDto createProject(ProjectRequestDto dto, Long id){
 
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFound("User with ID " + id + " not found"));
         
 
             Project project = projectMapper.toEntity(dto, user);
@@ -39,7 +40,7 @@ public class ProjectService {
     }
 
     public ProjectResponseDto showProject(Long projectId, User user){
-        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new RuntimeException("Fehler"));
+        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
         return projectMapper.toResponseDto(project);
     }
 
@@ -51,7 +52,7 @@ public class ProjectService {
 
     public ProjectResponseDto editProject(ProjectRequestDto dto, User user, Long projectId){ 
         
-        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new RuntimeException("Fehler"));
+        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
 
         
         project.setName(dto.getName());
@@ -64,7 +65,7 @@ public class ProjectService {
 
     public void deleteProject(Long projectId, User user){
         
-        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new RuntimeException("Fehler"));
+        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
         projectRepository.delete(project);
 
     }

@@ -11,6 +11,8 @@ import com.example.taskmanager.entity.Priority;
 import com.example.taskmanager.entity.Project;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.TaskStatus;
+import com.example.taskmanager.exception.TaskNotFound;
+import com.example.taskmanager.exception.UserNotFound;
 import com.example.taskmanager.mapper.TaskMapper;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.repository.ProjectRepository;
@@ -39,7 +41,7 @@ public class TaskService {
     }
 
     public TaskResponseDto showTask(Long taskId, Project project){
-        Task task = taskRepository.findByIdAndProject(taskId, project).orElseThrow(() -> new RuntimeException("Fehler"));
+        Task task = taskRepository.findByIdAndProject(taskId, project).orElseThrow(() -> new TaskNotFound("Task with ID " + taskId + " not found"));
         return taskMapper.toResponseDto(task);
     }
 
@@ -51,7 +53,7 @@ public class TaskService {
 
     public TaskResponseDto editTask(TaskRequestDto dto, Project project, Long taskId){ 
         
-        Task task = taskRepository.findByIdAndProject(taskId, project).orElseThrow(() -> new RuntimeException("Fehler"));
+        Task task = taskRepository.findByIdAndProject(taskId, project).orElseThrow(() -> new TaskNotFound("Task with ID " + taskId + " not found"));
 
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
@@ -66,7 +68,7 @@ public class TaskService {
 
     public void deleteTask(Long taskId, Project project){
         
-        Task task = taskRepository.findByIdAndProject(taskId, project).orElseThrow(() -> new RuntimeException("Fehler"));
+        Task task = taskRepository.findByIdAndProject(taskId, project).orElseThrow(() -> new TaskNotFound("Task with ID " + taskId + " not found"));
         taskRepository.delete(task);
 
     }

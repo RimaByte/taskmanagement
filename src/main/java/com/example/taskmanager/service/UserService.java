@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.taskmanager.dto.UserRequestDto;
 import com.example.taskmanager.dto.UserResponseDto;
 import com.example.taskmanager.entity.User;
+import com.example.taskmanager.exception.UserNotFound;
 import com.example.taskmanager.mapper.UserMapper;
 import com.example.taskmanager.repository.UserRepository;
 
@@ -35,7 +36,7 @@ public class UserService {
 
     public UserResponseDto showUser(Long userId){
         
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Fehler"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound("User with ID " + userId + " not found"));
         return userMapper.toResponseDto(user);
     }
 
@@ -47,7 +48,7 @@ public class UserService {
 
     public UserResponseDto editUser(UserRequestDto dto, Long userId){ 
         
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Fehler"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound("User with ID " + userId + " not found"));
 
         
         user.setUsername(dto.getUsername());
@@ -62,7 +63,7 @@ public class UserService {
 
     public void deleteUser(Long userId){
         
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Fehler"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFound("User with ID " + userId + " not found"));
         userRepository.delete(user);
 
     }
