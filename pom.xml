@@ -63,9 +63,53 @@
       <artifactId>spring-boot-starter-webmvc-test</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <!-- Validierung: ermoeglicht @NotBlank, @Email, @Size usw. auf DTOs -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- JWT (JSON Web Token) — für Authentifizierung ohne Session -->
+    <!-- jjwt-api: nur die Schnittstellen (Interfaces) — wird beim Kompilieren gebraucht -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>0.12.6</version>
+    </dependency>
+    <!-- jjwt-impl: die echte Implementierung — nur zur Laufzeit nötig, daher scope=runtime -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>0.12.6</version>
+      <scope>runtime</scope>
+    </dependency>
+    <!-- jjwt-jackson: wandelt Java-Objekte in JSON um (für den Token-Inhalt) -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>0.12.6</version>
+      <scope>runtime</scope>
+    </dependency>
+
   </dependencies>
 
 	<build>
+		<!-- Maven sucht standardmaessig in src/main/java -->
+		<!-- Unser Code liegt aber in backend/src/main/java -->
+		<!-- Diese Eintraege sagen Maven wo es suchen soll -->
+		<sourceDirectory>backend/src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>backend/src/main/resources</directory>
+			</resource>
+		</resources>
+		<testSourceDirectory>backend/src/test/java</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>backend/src/test/resources</directory>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

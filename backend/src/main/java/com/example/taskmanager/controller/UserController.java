@@ -2,6 +2,7 @@ package com.example.taskmanager.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +40,7 @@ public class UserController {
 
     // Public: Registrierung (in WebSecurityConfig bereits unter /register erlaubt)
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserRequestDto dto) {
         UserResponseDto response = userService.createUser(dto, null);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -58,7 +59,7 @@ public class UserController {
 
     @PutMapping("/users/{userId}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long userId,
-                                                      @RequestBody UserRequestDto dto) {
+                                                      @Valid @RequestBody UserRequestDto dto) {
         User currentUser = getCurrentUser();
         if (currentUser.getId() != userId) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

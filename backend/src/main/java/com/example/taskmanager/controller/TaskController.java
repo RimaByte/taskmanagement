@@ -2,6 +2,7 @@ package com.example.taskmanager.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,7 +52,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskResponseDto> createTask(@PathVariable Long projectId,
-                                                      @RequestBody TaskRequestDto dto) {
+                                                      @Valid @RequestBody TaskRequestDto dto) {
         User user = getCurrentUser();
         Project project = getProject(projectId, user);
         TaskResponseDto response = taskService.createTask(dto, project);
@@ -78,7 +79,7 @@ public class TaskController {
     @PutMapping("/{taskId}")
     public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long projectId,
                                                       @PathVariable Long taskId,
-                                                      @RequestBody TaskRequestDto dto) {
+                                                      @Valid @RequestBody TaskRequestDto dto) {
         User user = getCurrentUser();
         Project project = getProject(projectId, user);
         TaskResponseDto response = taskService.editTask(dto, project, taskId);

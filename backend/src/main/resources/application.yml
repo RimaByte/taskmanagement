@@ -1,0 +1,28 @@
+# application.yml — gemeinsame Konfiguration fuer alle Umgebungen
+#
+# Was ist ein Spring Profile?
+# Ein Profil ist eine "Umgebung" deiner App.
+# Du kannst verschiedene Einstellungen fuer "dev" (dein Laptop) und
+# "prod" (der echte Server) haben.
+#
+# Spring laedt immer diese Datei + die Datei des aktiven Profils.
+# z.B. bei spring.profiles.active=dev wird geladen:
+#   1. application.yml (diese Datei)
+#   2. application-dev.yml (ueberschreibt/ergaenzt)
+
+spring:
+  profiles:
+    # Welches Profil ist standardmaessig aktiv?
+    # Beim Starten auf dem Server wird das auf "prod" ueberschrieben
+    active: dev
+
+  # JPA Einstellungen (gelten fuer alle Umgebungen)
+  jpa:
+    hibernate:
+      # "update" = Hibernate passt die Datenbanktabellen automatisch an
+      # In Produktion wuerde man "validate" nehmen (kein automatisches Aendern)
+      ddl-auto: update
+
+# JWT-Einstellungen (gelten fuer alle Umgebungen)
+jwt:
+  expiration: 86400000  # 24 Stunden in Millisekunden

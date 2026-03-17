@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Sicherheit: Diese Dateien NIEMALS in git! ###
+# .env Dateien enthalten echte Passwörter und Secrets
+.env
+.env.local
+.env.prod
+# Falls jemand eine lokale Override-Datei erstellt
+application-local.yml
+application-local.properties

@@ -1,25 +1,28 @@
 package com.example.taskmanager.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.taskmanager.dto.UserRequestDto;
 import com.example.taskmanager.dto.UserResponseDto;
 import com.example.taskmanager.entity.Role;
 import com.example.taskmanager.entity.User;
-import com.example.taskmanager.security.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+// BCryptPasswordEncoder direkt injizieren — nicht die Konfigurationsklasse
 @Component
 public class UserMapper{
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserMapper(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public User toEntity(UserRequestDto dto){
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.passwordEncoder().encode(dto.getPassword())); // Verschlüsselt das Passwort mit BCrypt
+        user.setPassword(passwordEncoder.encode(dto.getPassword())); // Verschlüsselt das Passwort mit BCrypt
         user.setRole(Role.USER);
 
         return user;

@@ -1,0 +1,20 @@
+# application-dev.yml — Einstellungen fuer die lokale Entwicklung
+#
+# Diese Datei wird geladen wenn spring.profiles.active=dev gesetzt ist.
+# Hier sind Passwörter hardcoded - das ist fuer die lokale Entwicklung ok,
+# weil diese Werte nur auf deinem eigenen Laptop funktionieren.
+#
+# ABER: Diese Datei kommt trotzdem in git! Also keine echten Secrets hier.
+# Nur lokale Entwicklungswerte (localhost, test-Passwörter).
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/taskmanager
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234  # Dein lokales MySQL-Passwort
+
+# JWT Secret fuer die lokale Entwicklung
+# Darf ruhig ein einfacher Wert sein - nur fuer Tests lokal
+jwt:
+  secret: dev-secret-key-nur-fuer-lokale-entwicklung-taskmanager-2026

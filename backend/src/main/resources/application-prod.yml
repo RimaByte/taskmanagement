@@ -1,0 +1,32 @@
+# application-prod.yml — Einstellungen fuer den Produktionsserver
+#
+# KEIN einziges Passwort steht hier im Klartext!
+# Stattdessen: ${VARIABLE_NAME}
+#
+# Das bedeutet: Spring liest den Wert aus einer Umgebungsvariable.
+# Auf dem Server setzt der Administrator (oder Puppet/CI-CD):
+#   export DB_PASSWORD=geheimesPasswort123
+#   export JWT_SECRET=einSehrLangesGeheimesJwtSecret
+#
+# Wenn die Variable nicht gesetzt ist, gibt es einen Fehler beim Start.
+# Das ist gewollt — lieber kein Start als unsichere Konfiguration.
+
+spring:
+  datasource:
+    # ${DB_HOST} liest die Umgebungsvariable DB_HOST
+    # :localhost ist ein Standardwert falls die Variable nicht gesetzt ist
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/${DB_NAME:taskmanager}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}   # Pflicht - kein Standardwert
+    password: ${DB_PASSWORD}   # Pflicht - kein Standardwert
+
+  jpa:
+    hibernate:
+      # In Produktion NIEMALS "update" oder "create"!
+      # "validate" = Spring prueft ob die Tabellen stimmen, aendert aber nichts
+      ddl-auto: validate
+    # Keine SQL-Logs in Produktion (Performance + Sicherheit)
+    show-sql: false
+
+jwt:
+  secret: ${JWT_SECRET}  # Pflicht - muss auf dem Server gesetzt sein

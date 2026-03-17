@@ -1,5 +1,6 @@
 package com.example.taskmanager.entity;
 
+import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -12,8 +13,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+// UserDetails ist ein Interface von Spring Security
+// Es stellt sicher, dass Spring Security weiss:
+//   - Wie heisst der User? (getUsername)
+//   - Was ist sein Passwort? (getPassword)
+//   - Welche Rechte hat er? (getAuthorities)
+//   - Ist sein Account gueltig? (die isXxx-Methoden)
 @Entity
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,4 +81,20 @@ public List<Project> getProject() {
 public void setProject(List<Project> project) {
     this.project = project;
 }
+
+// ---- Pflichtmethoden von UserDetails ----
+
+// Gibt die Rollen/Rechte des Users zurueck
+// "ROLE_USER" oder "ROLE_ADMIN" - Spring Security erwartet das "ROLE_" Praefix
+@Override
+public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+}
+
+// Diese 4 Methoden geben immer true zurueck
+// Du koenntest hier z.B. Konto-Sperren oder Ablaufdaten pruefen
+@Override public boolean isAccountNonExpired() { return true; }
+@Override public boolean isAccountNonLocked() { return true; }
+@Override public boolean isCredentialsNonExpired() { return true; }
+@Override public boolean isEnabled() { return true; }
 }

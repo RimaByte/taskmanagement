@@ -2,30 +2,73 @@ package com.example.taskmanager.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Diese Methode konfiguriert die Sicherheitsfilter für deine Webanwendung
+    private final JwtAuthFilter jwtAuthFilter;
+    private final CustomUserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
+    // Spring injiziert alle drei automatisch (weil sie @Component / @Bean haben)
+    public WebSecurityConfig(
+            JwtAuthFilter jwtAuthFilter,
+            CustomUserDetailsService userDetailsService,
+            BCryptPasswordEncoder passwordEncoder) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .authorizeHttpRequests((authz) -> authz
-        .requestMatchers("/login", "/register").permitAll().anyRequest().authenticated())
-        .formLogin((form) -> form
-        .loginPage("/login")  // Definiert die benutzerdefinierte Login-Seite
-        .defaultSuccessUrl("/projects", true)  // Nach erfolgreichem Login weiterleiten
-        .permitAll())  // Erlaubt allen Benutzern den Zugriff auf die Login-Seite
-        .logout((logout) -> logout.permitAll());
-                
-                
-                
-                // Alle anderen Anfragen erfordern Authentifizierung
-        return http.build();  // Gibt den konfigurierten Filter zurück
+            // CSRF deaktivieren: CSRF ist fuer Browser/Session-Anwendungen
+            // REST APIs mit JWT brauchen keinen CSRF-Schutz
+            .csrf(csrf -> csrf.disable())
+
+            // Endpunkte konfigurieren: wer darf was aufrufen?
+            .authorizeHttpRequests(auth -> auth
+                // Diese Endpunkte sind oeffentlich (kein Token noetig)
+                .requestMatchers("/auth/login", "/register").permitAll()
+                // Alle anderen Endpunkte erfordern einen gueltigen JWT-Token
+                .anyRequest().authenticated()
+            )
+
+            // Session-Management: STATELESS = keine Server-Sessions
+            // Jede Anfrage traegt den Token selbst mit, der Server merkt sich nichts
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+
+            // Unseren JWT-Filter VOR den Standard-Login-Filter einfuegen
+            // Reihenfolge: JwtAuthFilter -> UsernamePasswordAuthenticationFilter -> Controller
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }
+
+
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }
