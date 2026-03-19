@@ -10,5 +10,5 @@ import { Login } from './components/login/login';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('taskmanager-frontend');
+  protected readonly title = signal('taskmanager');
 }

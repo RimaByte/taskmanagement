@@ -27,6 +27,7 @@ public class TaskMapper {
     public TaskResponseDto toResponseDto(Task task){
 
         TaskResponseDto dto = new TaskResponseDto();
+        dto.setId(task.getId());
         dto.setTitle(task.getTitle());
         dto.setDescription(task.getDescription());
         dto.setStatus(task.getTaskStatus().toString());

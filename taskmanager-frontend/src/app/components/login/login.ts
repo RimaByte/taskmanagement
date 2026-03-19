@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],        // ← hier hinzufügen
+  imports: [FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -31,6 +31,10 @@ constructor(private auth: Auth, private router: Router){}
 
      this.auth.login(this.username, this.password);
     }
+  }
+
+  zumRegister(): void{
+    this.router.navigate(['/register']);
   }
 }
 

@@ -1,0 +1,33 @@
+<h2>Aufgaben</h2>
+
+<div>
+    <input [(ngModel)]="title" placeholder="Name">
+    <input [(ngModel)]="description" placeholder="Beschreibung">
+    <input [(ngModel)]="dueDate" placeholder="Datum">
+    <select [(ngModel)]="status">
+  <option value="OPEN">Offen</option>
+  <option value="IN_PROGRESS">In Bearbeitung</option>
+  <option value="DONE">Erledigt</option>
+    </select>
+
+<select [(ngModel)]="priority">
+  <option value="LOW">Niedrig</option>
+  <option value="MEDIUM">Mittel</option>
+  <option value="HIGH">Hoch</option>
+</select>
+
+    <button (click)="erstelleTask()">Aufgabe erstellen</button>
+</div>
+
+
+
+@for (task of aufgaben(); track task.id){
+    <div>
+        {{task.title}}, {{task.description}}, {{task.dueDate}}, {{task.priority}}, {{task.status}} 
+        <button (click)="loescheTask(task.id)">Löschen</button>
+
+
+    </div>
+}@empty {
+       <p>Keine Aufgaben vorhanden.</p>
+}

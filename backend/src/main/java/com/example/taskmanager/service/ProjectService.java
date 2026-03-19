@@ -40,7 +40,7 @@ public class ProjectService {
     }
 
     public ProjectResponseDto showProject(Long projectId, User user){
-        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
+        Project project = projectRepository.findByIdAndOwner(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
         return projectMapper.toResponseDto(project);
     }
 
@@ -52,7 +52,7 @@ public class ProjectService {
 
     public ProjectResponseDto editProject(ProjectRequestDto dto, User user, Long projectId){ 
         
-        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
+        Project project = projectRepository.findByIdAndOwner(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
 
         
         project.setName(dto.getName());
@@ -65,7 +65,7 @@ public class ProjectService {
 
     public void deleteProject(Long projectId, User user){
         
-        Project project = projectRepository.findByIdAndOwnerId(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
+        Project project = projectRepository.findByIdAndOwner(projectId, user).orElseThrow(() -> new UserNotFound("Project with ID " + projectId + " not found"));
         projectRepository.delete(project);
 
     }

@@ -13,17 +13,32 @@ interface ProjectResponse{
 })
 export class Project {
 
-constructor(private http: HttpClient, ){}
+constructor(private http: HttpClient ){}
+
+private getHeaders(): HttpHeaders {
+  return new HttpHeaders({ 'Authorization': 'Bearer ' + localStorage.getItem('token')});
+}
 
 getProjects(): Observable<ProjectResponse[]>{
 
-const headers = new HttpHeaders({
-  'Authorization': 'Bearer ' + localStorage.getItem('token')
-});
-
+const headers = this.getHeaders();
 return this.http.get<ProjectResponse[]>('http://localhost:8080/projects', {headers})
 }
 
+  createProject(name: string, description: string): Observable<any> {
+  const headers = this.getHeaders();
+    return this.http.post<any>(
+      'http://localhost:8080/projects',
+      {name, description},
+      {headers}
+    );
+  }
 
-
+  loescheProjekt(id: number): Observable<any>{
+   const headers = this.getHeaders();
+   return this.http.delete<any>(
+      `http://localhost:8080/projects/${id}`,
+      {headers}
+    );
+}
 }

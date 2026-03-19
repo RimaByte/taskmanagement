@@ -24,7 +24,6 @@ public class WebSecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    // Spring injiziert alle drei automatisch (weil sie @Component / @Bean haben)
     public WebSecurityConfig(
             JwtAuthFilter jwtAuthFilter,
             CustomUserDetailsService userDetailsService,
@@ -37,29 +36,15 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // CSRF deaktivieren: CSRF ist fuer Browser/Session-Anwendungen
-            // REST APIs mit JWT brauchen keinen CSRF-Schutz
             .csrf(csrf -> csrf.disable())
-
-            // CORS aktivieren: erlaubt Anfragen von Angular (localhost:4200)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-            // Endpunkte konfigurieren: wer darf was aufrufen?
             .authorizeHttpRequests(auth -> auth
-                // Diese Endpunkte sind oeffentlich (kein Token noetig)
                 .requestMatchers("/auth/login", "/register").permitAll()
-                // Alle anderen Endpunkte erfordern einen gueltigen JWT-Token
                 .anyRequest().authenticated()
             )
-
-            // Session-Management: STATELESS = keine Server-Sessions
-            // Jede Anfrage traegt den Token selbst mit, der Server merkt sich nichts
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-
-            // Unseren JWT-Filter VOR den Standard-Login-Filter einfuegen
-            // Reihenfolge: JwtAuthFilter -> UsernamePasswordAuthenticationFilter -> Controller
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -72,18 +57,16 @@ public class WebSecurityConfig {
         return provider;
     }
 
-
-    // Welche Origins (Domains/Ports) dürfen Anfragen schicken?
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));   // Angular
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));    // alle Header erlaubt (inkl. Authorization)
+        config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);  // gilt für alle Endpunkte
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

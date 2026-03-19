@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ProjectRepository extends CrudRepository<Project, Long>{
 
-    Optional<Project> findByIdAndOwnerId(Long projectId, User owner);
+    Optional<Project> findByIdAndOwner(Long projectId, User owner);
     List<Project> findByOwner(User owner);
 
     

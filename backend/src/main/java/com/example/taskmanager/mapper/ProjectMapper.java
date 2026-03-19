@@ -22,6 +22,7 @@ public class ProjectMapper {
 
     public ProjectResponseDto toResponseDto(Project project){
         ProjectResponseDto dto = new ProjectResponseDto();
+        dto.setId(project.getId());
         dto.setName(project.getName());
         dto.setDescription(project.getDescription());
         dto.setOwnerId(project.getOwner().getId());

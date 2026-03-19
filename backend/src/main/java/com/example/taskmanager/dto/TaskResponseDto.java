@@ -1,6 +1,9 @@
 package com.example.taskmanager.dto;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 public class TaskResponseDto {
 
@@ -9,7 +12,11 @@ public class TaskResponseDto {
     private String description;
     private String status;
     private String priority;
+    
+    @JsonProperty("dueDate")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate DueDate;
+
     private Long projectId;
 
     public TaskResponseDto () {}

@@ -1,4 +1,20 @@
+<button (click)="logout()">Logout</button>
+
+<hr>
+<div><input [(ngModel)]="name" placeholder="Projektname">
+<input [(ngModel)]="description" placeholder="Beschreibung">
+<button (click)="erstelleProjekt()">Projekt Erstellen</button>
+
+</div>
+
+
 <h2>Meine Projekte</h2>
+
  @for (projekt of projekte(); track projekt.id){
- <div>   {{projekt.id}} , {{projekt.name}} , {{projekt.description}}</div>
+ <div>   {{projekt.id}} , {{projekt.name}} , {{projekt.description}}
+       <button (click)="zeigeAufgaben(projekt.id)">Aufgaben zeigen</button>
+        <button (click)="loescheProjekt(projekt.id)">Löschen</button>
+ </div>
+}@empty {
+       <p>Keine Projekte vorhanden.</p>
 }

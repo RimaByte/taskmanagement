@@ -15,6 +15,8 @@ export class Auth {
 
   constructor(private http: HttpClient, private router: Router){}
 
+  private logoutTimer: any = null;
+
 
   login(username: string, password:string): void {
     this.http.post<LoginResponse>(
@@ -22,11 +24,23 @@ export class Auth {
       {username, password})
       .subscribe(antwort => {
       localStorage.setItem('token', antwort.token);
+      this.logoutTimer = setTimeout(() => {
+        this.logout();
+      }, 120000)
       this.router.navigate(['/projects']);
     });
   } 
 
+  logout(): void{
 
+    if (this.logoutTimer){
+      clearTimeout(this.logoutTimer);
+    }
+    
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+    
+  }
 
 }
   

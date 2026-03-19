@@ -26,25 +26,13 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    // POST /auth/login
-    // Client schickt: { "username": "max", "password": "1234" }
-    // Server antwortet: { "token": "eyJhbGci..." }
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
-
-        // AuthenticationManager prueft Username + Passwort gegen die DB
-        // Falls falsch -> wirft BadCredentialsException -> Spring gibt 401 zurueck
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
         );
-
-        // Wer hat sich authentifiziert? getName() gibt den Username zurueck
         String username = authentication.getName();
-
-        // JWT-Token erstellen
         String token = jwtUtil.generateToken(username);
-
-        // Token im Response-Body zurueckschicken
         return ResponseEntity.ok(new LoginResponseDto(token));
     }
 }

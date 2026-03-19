@@ -46,7 +46,7 @@ public class TaskController {
     }
 
     private Project getProject(Long projectId, User user) {
-        return projectRepository.findByIdAndOwnerId(projectId, user)
+        return projectRepository.findByIdAndOwner(projectId, user)
                 .orElseThrow(() -> new ProjectNotFound("Project with ID " + projectId + " not found"));
     }
 
