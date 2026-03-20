@@ -1,33 +1,69 @@
-<h2>Aufgaben</h2>
+<mat-toolbar color="primary">
+  <span class="toolbar-title">Task Management</span>
+  <span class="spacer"></span>
+  <button mat-flat-button color="warn" (click)="seiteZurueck()">Zurück</button>
+</mat-toolbar>
 
-<div>
-    <input [(ngModel)]="title" placeholder="Name">
-    <input [(ngModel)]="description" placeholder="Beschreibung">
-    <input [(ngModel)]="dueDate" placeholder="Datum">
-    <select [(ngModel)]="status">
-  <option value="OPEN">Offen</option>
-  <option value="IN_PROGRESS">In Bearbeitung</option>
-  <option value="DONE">Erledigt</option>
-    </select>
+<div class="page-container">
 
-<select [(ngModel)]="priority">
-  <option value="LOW">Niedrig</option>
-  <option value="MEDIUM">Mittel</option>
-  <option value="HIGH">Hoch</option>
-</select>
+  <h2>Aufgaben</h2>
 
-    <button (click)="erstelleTask()">Aufgabe erstellen</button>
+  <mat-card class="form-card">
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Titel</mat-label>
+        <input matInput [(ngModel)]="title">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Beschreibung</mat-label>
+        <input matInput [(ngModel)]="description">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Datum</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="dueDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="status">
+          <mat-option value="OPEN">Offen</mat-option>
+          <mat-option value="IN_PROGRESS">In Bearbeitung</mat-option>
+          <mat-option value="DONE">Erledigt</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Priorität</mat-label>
+        <mat-select [(ngModel)]="priority">
+          <mat-option value="LOW">Niedrig</mat-option>
+          <mat-option value="MEDIUM">Mittel</mat-option>
+          <mat-option value="HIGH">Hoch</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" (click)="erstelleTask()">Aufgabe erstellen</button>
+    </mat-card-content>
+  </mat-card>
+
+  @for (task of aufgaben(); track task.id) {
+    <mat-card class="task-card">
+      <mat-card-header>
+        <mat-card-title>{{task.title}}</mat-card-title>
+        <mat-card-subtitle>{{task.description}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Status: {{task.status}} | Priorität: {{task.priority}} | Datum: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="warn" (click)="loescheTask(task.id)">Löschen</button>
+      </mat-card-actions>
+    </mat-card>
+  } @empty {
+    <p>Keine Aufgaben vorhanden.</p>
+  }
+
 </div>
-
-
-
-@for (task of aufgaben(); track task.id){
-    <div>
-        {{task.title}}, {{task.description}}, {{task.dueDate}}, {{task.priority}}, {{task.status}} 
-        <button (click)="loescheTask(task.id)">Löschen</button>
-
-
-    </div>
-}@empty {
-       <p>Keine Aufgaben vorhanden.</p>
-}

@@ -3,13 +3,15 @@ import { Project} from '../../services/project'
 import { Auth } from '../../service/auth';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
-
-
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-projects',
-  imports: [FormsModule],
+  imports: [FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatToolbarModule],
   templateUrl: './projects.html',
   styleUrl: './projects.css',
 })

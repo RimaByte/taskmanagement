@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body, app-root {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  overscroll-behavior: none;
+  background-color: #8b8b8b !important;
+}
+
+app-root {
+  display: block;
+}
+
+mat-card {
+  background-color: #f5f5f5 !important;
+}
+
+mat-toolbar {
+  background-color: #424242 !important;
+  color: white !important;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar-title {
+  font-size: 20px;
+  font-weight: 600;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 300;
+  color: #212121;
+  margin: 0;
+}

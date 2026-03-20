@@ -1,10 +1,41 @@
-<h2>Registrieren</h2>
+<div class="register-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Registrieren</mat-card-title>
+    </mat-card-header>
 
-<div>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Benutzername</mat-label>
+        <input matInput [(ngModel)]="username">
+      </mat-form-field>
 
-    <input [(ngModel)]="username" placeholder="Benutzername"> 
-    <input [(ngModel)]="email" placeholder="E-Mail"> 
-    <input [(ngModel)]="password" placeholder="Passwort" type="password">
-    <button (click)="register()">Registrieren</button> 
+      <mat-form-field>
+    <mat-label>E-Mail Adresse</mat-label>
+    <input matInput [(ngModel)]="email" placeholder="beispiel@beispiel.com">
+        @if (fehler) {
+      <mat-error>{{fehler}}</mat-error>
+    }
+    </mat-form-field>
 
+
+    <mat-form-field>
+  <mat-label>Passwort</mat-label>
+  <input matInput [type]="hide() ? 'password' : 'text'" [(ngModel)]="password">
+  <button mat-icon-button matSuffix (click)="clickEvent($event)">
+    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </button>
+    </mat-form-field>
+
+      @if (fehler) {
+        <p style="color: red;">{{fehler}}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-flat-button color="primary" (click)="register()">Registrieren</button>
+      <button mat-button (click)="zuLogin()">Anmelden</button>
+    </mat-card-actions>
+
+  </mat-card>
 </div>

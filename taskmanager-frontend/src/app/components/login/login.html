@@ -1,10 +1,33 @@
-<div>
+<div class="login-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Anmelden</mat-card-title>
+    </mat-card-header>
 
-<h2>Login</h2>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Benutzername</mat-label>
+        <input matInput [(ngModel)]="username">
+      </mat-form-field>
 
-<input [(ngModel)]="username" placeholder="Benutzername">
-<input [(ngModel)]="password" placeholder="Passwort" type="password">
+    <mat-form-field>
+  <mat-label>Passwort</mat-label>
+  <input matInput [type]="hide() ? 'password' : 'text'" [(ngModel)]="password">
+  <button mat-icon-button matSuffix (click)="clickEvent($event)">
+    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </button>
+    </mat-form-field>
 
-<button (click)="login()">Einloggen</button>
-<button (click)="zumRegister()">Registrieren</button>
+
+      @if (fehler) {
+        <p style="color: red;">{{fehler}}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-flat-button color="primary" (click)="login()">Einloggen</button>
+      <button mat-button (click)="zumRegister()">Registrieren</button>
+    </mat-card-actions>
+
+  </mat-card>
 </div>

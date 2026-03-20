@@ -18,18 +18,24 @@ export class Auth {
   private logoutTimer: any = null;
 
 
-  login(username: string, password:string): void {
-    this.http.post<LoginResponse>(
-      "http://localhost:8080/auth/login",
-      {username, password})
-      .subscribe(antwort => {
-      localStorage.setItem('token', antwort.token);
-      this.logoutTimer = setTimeout(() => {
-        this.logout();
-      }, 120000)
-      this.router.navigate(['/projects']);
+  login(username: string, password: string, beiError: (nachricht: string) => void): void {
+  this.http.post<LoginResponse>(
+    "http://localhost:8080/auth/login",
+    {username, password})
+    .subscribe({
+      next: antwort => {
+        localStorage.setItem('token', antwort.token);
+        this.logoutTimer = setTimeout(() => {
+          this.logout();
+        }, 120000);
+        this.router.navigate(['/projects']);
+      },
+      error: () => {
+        beiError("Falscher Benutzername oder Passwort");
+      }
     });
-  } 
+}
+
 
   logout(): void{
 

@@ -1,20 +1,42 @@
-<button (click)="logout()">Logout</button>
+<mat-toolbar color="primary">
+  <span class="toolbar-title">Task Management</span>
+  <span class="spacer"></span>
+  <button mat-flat-button color="warn" (click)="logout()">Logout</button>
+</mat-toolbar>
 
-<hr>
-<div><input [(ngModel)]="name" placeholder="Projektname">
-<input [(ngModel)]="description" placeholder="Beschreibung">
-<button (click)="erstelleProjekt()">Projekt Erstellen</button>
+<div class="page-container">
+
+  <h2>Meine Projekte</h2>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Projektname</mat-label>
+        <input matInput [(ngModel)]="name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Beschreibung</mat-label>
+        <input matInput [(ngModel)]="description">
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" (click)="erstelleProjekt()">Projekt erstellen</button>
+    </mat-card-content>
+  </mat-card>
+
+  @for (projekt of projekte(); track projekt.id) {
+    <mat-card class="projekt-card">
+      <mat-card-header>
+        <mat-card-title>{{projekt.name}}</mat-card-title>
+        <mat-card-subtitle>{{projekt.description}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="zeigeAufgaben(projekt.id)">Aufgaben</button>
+        <button mat-button color="warn" (click)="loescheProjekt(projekt.id)">Löschen</button>
+      </mat-card-actions>
+    </mat-card>
+  } @empty {
+    <p>Keine Projekte vorhanden.</p>
+  }
 
 </div>
-
-
-<h2>Meine Projekte</h2>
-
- @for (projekt of projekte(); track projekt.id){
- <div>   {{projekt.id}} , {{projekt.name}} , {{projekt.description}}
-       <button (click)="zeigeAufgaben(projekt.id)">Aufgaben zeigen</button>
-        <button (click)="loescheProjekt(projekt.id)">Löschen</button>
- </div>
-}@empty {
-       <p>Keine Projekte vorhanden.</p>
-}
